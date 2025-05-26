@@ -1,0 +1,56 @@
+name: Deploy LC Math Search
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup SSH
+        uses: webfactory/ssh-agent@v0.8.0
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Add server to known hosts
+        run: |
+          ssh-keyscan -H ${{ secrets.SERVER_HOST }} >> ~/.ssh/known_hosts
+
+      - name: Deploy to server
+        run: |
+          ssh ${{ secrets.SSH_USER }}@${{ secrets.SERVER_HOST }} << 'EOF'
+            # Navigate to application directory
+            cd ${{ secrets.APP_PATH || '/home/ubuntu/lc-math-search/math-search-webapp' }}
+            
+            # Pull latest changes
+            git pull origin main
+            
+            # Deploy using our script
+            ./deploy.sh update
+            
+            # Check deployment status
+            sleep 10
+            ./deploy.sh status
+          EOF
+
+      - name: Verify deployment
+        run: |
+          # Wait a bit for the service to start
+          sleep 30
+
+          # Check if the application is responding
+          response=$(curl -s -o /dev/null -w "%{http_code}" http://${{ secrets.SERVER_HOST }}:5000/api/status || echo "000")
+
+          if [ "$response" = "200" ]; then
+            echo "✅ Deployment successful! Application is responding."
+          else
+            echo "❌ Deployment may have failed. HTTP status: $response"
+            exit 1
+          fi

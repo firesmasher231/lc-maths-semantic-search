@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  math-search:
+    build: .
+    container_name: lc-math-search
+    ports:
+      - "${APP_PORT:-8080}:${FLASK_PORT:-5000}"
+    volumes:
+      # Mount the papers directory from host to container
+      - ./data/papers:/app/data/papers:ro
+      # Optional: Mount for logs
+      - ./logs:/app/logs
+    environment:
+      - FLASK_ENV=production
+      - FLASK_HOST=0.0.0.0
+      - FLASK_PORT=${FLASK_PORT:-5000}
+      - FLASK_DEBUG=${FLASK_DEBUG:-False}
+      - PYTHONPATH=/app
+    restart: unless-stopped
+    healthcheck:
+      test:
+        ["CMD", "curl", "-f", "http://localhost:${FLASK_PORT:-5000}/api/status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    networks:
+      - math-search-network
+
+networks:
+  math-search-network:
+    driver: bridge

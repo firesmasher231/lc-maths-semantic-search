@@ -1,0 +1,652 @@
+{
+    "1996": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ]
+    },
+    "1997": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ]
+    },
+    "1998": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ]
+    },
+    "1999": {
+        "Exam Paper": []
+    },
+    "2000": {
+        "Exam Paper": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALPO00EV.pdf",
+                "type": "Exam Paper"
+            }
+        ]
+    },
+    "2001": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP1EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2002": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP1EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2003": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": []
+    },
+    "2004": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP1EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2005": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP1EV.pdf",
+                "type": "Marking Scheme"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP2EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2006": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALPO00EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2007": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALPO00EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2008": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2009": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2010": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP230EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            },
+            {
+                "details": "Project Maths / Higher Level (EV)",
+                "url": "LC003ALP030EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2011": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper One: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP130EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP230EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            },
+            {
+                "details": "Project Maths / Higher Level (EV)",
+                "url": "LC003ALP030EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2012": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper One: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP130EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP230EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            },
+            {
+                "details": "Project Maths / Higher Level (EV)",
+                "url": "LC003ALP030EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2013": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper One: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP130EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP230EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            },
+            {
+                "details": "Project Maths / Higher Level (EV)",
+                "url": "LC003ALP030EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2014": {
+        "Exam Paper": [
+            {
+                "details": "Paper One: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP130EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two: Project Maths / Higher Level (EV)",
+                "url": "LC003ALP230EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2015": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2016": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2017": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2018": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2019": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2020": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2021": {
+        "Exam Paper": [
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    },
+    "2022": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ],
+        "Deferred Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Deferred Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Deferred Exam Paper"
+            }
+        ],
+        "Deferred Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Deferred Marking Scheme"
+            }
+        ]
+    },
+    "2023": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ],
+        "Deferred Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Deferred Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Deferred Exam Paper"
+            }
+        ],
+        "Deferred Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Deferred Marking Scheme"
+            }
+        ]
+    },
+    "2024": {
+        "Exam Paper": [
+            {
+                "details": "Paper One / Higher Level (EV)",
+                "url": "LC003ALP100EV.pdf",
+                "type": "Exam Paper"
+            },
+            {
+                "details": "Paper Two / Higher Level (EV)",
+                "url": "LC003ALP200EV.pdf",
+                "type": "Exam Paper"
+            }
+        ],
+        "Marking Scheme": [
+            {
+                "details": "Higher Level (EV)",
+                "url": "LC003ALP000EV.pdf",
+                "type": "Marking Scheme"
+            }
+        ]
+    }
+}
