@@ -5,6 +5,8 @@ Works surprisingly well in my opinion.
 # Example
 
 ```
+cd math-search-webapp
+pip install -r requirements.txt
 python app.py
 ```
 
