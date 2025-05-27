@@ -5,7 +5,7 @@ Works surprisingly well in my opinion.
 # Example
 
 ```
-cd math-search-webapp
+cd api
 pip install -r requirements.txt
 python app.py
 ```
@@ -13,5 +13,7 @@ python app.py
 Visit http://localhost:5000/ (or whatever port it tells you to)
 
 Type in whatever topic you want questions on
+
+![alt text](image1.png)
 
 ![alt text](image.png)
