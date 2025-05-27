@@ -3,8 +3,8 @@ builder = "nixpacks"
 
 [deploy]
 workingDirectory = "api"
-startCommand = "gunicorn --bind 0.0.0.0:$PORT app:app"
+startCommand = "python start.py"
 
 [env]
-PYTHONPATH = "/app/api"
+PYTHONPATH = "/app"
 FLASK_ENV = "production" 
