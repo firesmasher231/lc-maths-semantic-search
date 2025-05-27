@@ -46,13 +46,13 @@ body {
 }
 
 .status-bar {
-	background: white;
+	background: rgba(52, 152, 219, 0.1);
+	border: 1px solid rgba(52, 152, 219, 0.2);
 	border-radius: 8px;
-	padding: 25px;
-	margin-bottom: 40px;
-	box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+	padding: 15px 20px;
+	margin-top: 25px;
 	text-align: center;
-	border-left: 4px solid #3498db;
+	transition: all 0.3s ease;
 }
 
 .status-content {
@@ -60,19 +60,27 @@ body {
 	align-items: center;
 	justify-content: center;
 	gap: 12px;
-	font-size: 1.1rem;
-	color: #34495e;
+	color: #3498db;
+	font-weight: 500;
+	font-size: 1rem;
 }
 
 .status-bar.ready {
-	border-left-color: #27ae60;
-	background: #f8fff9;
+	background: rgba(39, 174, 96, 0.1);
+	border-color: rgba(39, 174, 96, 0.2);
+}
+
+.status-bar.ready .status-content {
+	color: #27ae60;
 }
 
 .status-bar.error {
-	border-left-color: #e74c3c;
-	background: #fdf2f2;
-	color: #c0392b;
+	background: rgba(231, 76, 60, 0.1);
+	border-color: rgba(231, 76, 60, 0.2);
+}
+
+.status-bar.error .status-content {
+	color: #e74c3c;
 }
 
 .search-section {
@@ -328,56 +336,116 @@ body {
 
 .papers-grid {
 	display: grid;
-	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-	gap: 20px;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+	gap: 25px;
 }
 
-.paper-card {
+.year-card {
 	background: #fdfdfd;
 	border: 2px solid #ecf0f1;
-	border-radius: 8px;
-	padding: 25px 20px;
-	text-align: center;
-	cursor: pointer;
+	border-radius: 12px;
+	overflow: hidden;
 	transition: all 0.3s ease;
 	position: relative;
-	overflow: hidden;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.paper-card::before {
+.year-card:hover {
+	transform: translateY(-3px);
+	box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+	border-color: #9b59b6;
+}
+
+.year-header {
+	background: linear-gradient(135deg, #9b59b6, #8e44ad);
+	color: white;
+	padding: 20px;
+	text-align: center;
+	position: relative;
+}
+
+.year-header::after {
 	content: "";
 	position: absolute;
-	top: 0;
+	bottom: 0;
 	left: 0;
 	right: 0;
 	height: 3px;
-	background: #9b59b6;
-	transform: scaleX(0);
-	transition: transform 0.3s ease;
+	background: linear-gradient(
+		90deg,
+		transparent,
+		rgba(255, 255, 255, 0.3),
+		transparent
+	);
 }
 
-.paper-card:hover::before {
-	transform: scaleX(1);
-}
-
-.paper-card:hover {
-	border-color: #9b59b6;
-	transform: translateY(-2px);
-	box-shadow: 0 6px 20px rgba(155, 89, 182, 0.15);
-	background: white;
-}
-
-.paper-year {
-	font-size: 1.4rem;
+.year-number {
+	font-size: 1.8rem;
 	font-weight: 600;
-	color: #2c3e50;
-	margin-bottom: 8px;
+	font-family: "Georgia", serif;
+	text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
 
-.paper-number {
-	color: #7f8c8d;
-	font-size: 1rem;
-	font-style: italic;
+.year-content {
+	padding: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
+}
+
+.paper-item,
+.marking-scheme-item {
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	padding: 12px 16px;
+	border-radius: 8px;
+	cursor: pointer;
+	transition: all 0.2s ease;
+	font-weight: 500;
+	font-family: "Georgia", serif;
+	border: 1px solid transparent;
+}
+
+.paper-item {
+	background: #f8f9fa;
+	color: #2c3e50;
+	border-color: #e9ecef;
+}
+
+.paper-item:hover {
+	background: #e67e22;
+	color: white;
+	transform: translateX(5px);
+	border-color: #d35400;
+	box-shadow: 0 2px 8px rgba(230, 126, 34, 0.3);
+}
+
+.marking-scheme-item {
+	background: #e8f5e8;
+	color: #27ae60;
+	border-color: #d5e8d5;
+	font-weight: 600;
+}
+
+.marking-scheme-item:hover {
+	background: #27ae60;
+	color: white;
+	transform: translateX(5px);
+	border-color: #229954;
+	box-shadow: 0 2px 8px rgba(39, 174, 96, 0.3);
+}
+
+.paper-item i,
+.marking-scheme-item i {
+	font-size: 1.1rem;
+	width: 20px;
+	text-align: center;
+}
+
+/* Legacy styles for backward compatibility - can be removed later */
+.paper-card {
+	display: none; /* Hide old style */
 }
 
 .loading {
@@ -567,8 +635,28 @@ body {
 	}
 
 	.papers-grid {
-		grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-		gap: 15px;
+		grid-template-columns: 1fr;
+		gap: 20px;
+	}
+
+	.year-card {
+		margin: 0 auto;
+		max-width: 400px;
+	}
+
+	.year-content {
+		padding: 15px;
+		gap: 10px;
+	}
+
+	.paper-item,
+	.marking-scheme-item {
+		padding: 10px 14px;
+		font-size: 0.95rem;
+	}
+
+	.year-number {
+		font-size: 1.6rem;
 	}
 
 	.modal-content {

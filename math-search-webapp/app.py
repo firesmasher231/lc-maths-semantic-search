@@ -332,20 +332,49 @@ def find_marking_scheme_page(year, question_number):
 
 @app.route("/api/papers")
 def get_available_papers():
-    """Get list of available papers."""
+    """Get list of available papers grouped by year with marking scheme info."""
     papers_dir = os.path.join("data", "papers")
-    papers = []
+    markingscheme_dir = os.path.join("data", "markingscheme")
 
+    papers_by_year = {}
+
+    # Get all papers
     if os.path.exists(papers_dir):
         for filename in os.listdir(papers_dir):
             if filename.endswith(".pdf"):
                 year = filename[:4]
                 paper = filename.split("-paper")[1].split(".")[0]
-                papers.append({"year": year, "paper": paper, "filename": filename})
 
-    # Sort by year (descending) and then by paper number
-    papers.sort(key=lambda x: (int(x["year"]), int(x["paper"])), reverse=True)
-    return jsonify(papers)
+                if year not in papers_by_year:
+                    papers_by_year[year] = {
+                        "year": year,
+                        "papers": [],
+                        "has_marking_scheme": False,
+                    }
+
+                papers_by_year[year]["papers"].append(
+                    {"paper": paper, "filename": filename}
+                )
+
+    # Check for marking schemes
+    if os.path.exists(markingscheme_dir):
+        for filename in os.listdir(markingscheme_dir):
+            if filename.endswith(".pdf") and "markingscheme" in filename:
+                year = filename[:4]
+                if year in papers_by_year:
+                    papers_by_year[year]["has_marking_scheme"] = True
+
+    # Convert to list and sort
+    result = list(papers_by_year.values())
+
+    # Sort papers within each year
+    for year_data in result:
+        year_data["papers"].sort(key=lambda x: int(x["paper"]))
+
+    # Sort years (most recent first)
+    result.sort(key=lambda x: int(x["year"]), reverse=True)
+
+    return jsonify(result)
 
 
 if __name__ == "__main__":

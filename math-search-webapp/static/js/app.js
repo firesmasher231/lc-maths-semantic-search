@@ -317,36 +317,49 @@ class MathSearchApp {
 		}
 	}
 
-	displayPapers(papers) {
-		if (papers.length === 0) {
+	displayPapers(yearGroups) {
+		if (yearGroups.length === 0) {
 			this.papersGrid.innerHTML =
 				'<div class="no-results">No papers available</div>';
 			return;
 		}
 
-		// Sort papers by year (most recent first), then by paper number
-		papers.sort((a, b) => {
-			const yearDiff = parseInt(b.year) - parseInt(a.year);
-			if (yearDiff !== 0) {
-				return yearDiff;
-			}
-			// If same year, sort by paper number
-			return parseInt(a.paper) - parseInt(b.paper);
-		});
-
 		this.papersGrid.innerHTML = "";
 
-		papers.forEach((paper) => {
-			const paperCard = document.createElement("div");
-			paperCard.className = "paper-card";
-			paperCard.onclick = () => this.openPdf(paper.year, paper.paper);
+		yearGroups.forEach((yearData) => {
+			const yearCard = document.createElement("div");
+			yearCard.className = "year-card";
 
-			paperCard.innerHTML = `
-                <div class="paper-year">${paper.year}</div>
-                <div class="paper-number">Paper ${paper.paper}</div>
-            `;
+			// Create papers list
+			const papersHtml = yearData.papers
+				.map(
+					(paper) =>
+						`<div class="paper-item" onclick="app.openPdf('${yearData.year}', '${paper.paper}')">
+					<i class="fas fa-file-pdf"></i>
+					Paper ${paper.paper}
+				</div>`
+				)
+				.join("");
 
-			this.papersGrid.appendChild(paperCard);
+			// Create marking scheme section if available
+			const markingSchemeHtml = yearData.has_marking_scheme
+				? `<div class="marking-scheme-item" onclick="app.openMarkingScheme('${yearData.year}')">
+					<i class="fas fa-check-circle"></i>
+					Marking Scheme
+				</div>`
+				: "";
+
+			yearCard.innerHTML = `
+				<div class="year-header">
+					<div class="year-number">${yearData.year}</div>
+				</div>
+				<div class="year-content">
+					${papersHtml}
+					${markingSchemeHtml}
+				</div>
+			`;
+
+			this.papersGrid.appendChild(yearCard);
 		});
 	}
 
