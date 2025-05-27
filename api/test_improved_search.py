@@ -1,6 +1,7 @@
 import PyPDF2
 import os
 import json
+import requests
 
 
 def test_improved_search(year, question_number):
@@ -199,6 +200,109 @@ def test_improved_search(year, question_number):
         return {"error": f"Error processing marking scheme: {str(e)}"}
 
 
+def test_improved_marking_scheme_logic():
+    """Test the improved marking scheme finding logic"""
+
+    # Test cases - these should now find the actual solution pages
+    test_cases = [
+        {
+            "year": "2023",
+            "question": 3,
+            "expected_page_range": (10, 15),
+        },  # Should find page 12
+        {
+            "year": "2023",
+            "question": 1,
+            "expected_page_range": (6, 10),
+        },  # Should find around page 7
+        {
+            "year": "2023",
+            "question": 2,
+            "expected_page_range": (9, 12),
+        },  # Should find around page 10
+        {
+            "year": "2022",
+            "question": 3,
+            "expected_page_range": (8, 15),
+        },  # Test another year
+        {
+            "year": "2000",
+            "question": 1,
+            "should_fail": True,
+        },  # Should fail for year 2000
+    ]
+
+    base_url = "http://localhost:5000"
+
+    print("Testing improved marking scheme logic...")
+    print("=" * 60)
+
+    for i, test_case in enumerate(test_cases, 1):
+        year = test_case["year"]
+        question = test_case["question"]
+
+        print(f"\nTest {i}: Year {year}, Question {question}")
+        print("-" * 40)
+
+        try:
+            url = f"{base_url}/api/markingscheme/{year}/question/{question}"
+            response = requests.get(url, timeout=10)
+
+            if response.status_code == 200:
+                data = response.json()
+                page = data.get("page")
+                found = data.get("found")
+                content_type = data.get("content_type", "unknown")
+                matched_text = data.get("matched_text", "")
+
+                print(f"✓ Found: {found}")
+                print(f"✓ Page: {page}")
+                print(f"✓ Content Type: {content_type}")
+                print(f"✓ Matched Text: {matched_text[:80]}...")
+
+                # Check if it's in expected range
+                if "expected_page_range" in test_case:
+                    min_page, max_page = test_case["expected_page_range"]
+                    if min_page <= page <= max_page:
+                        print(
+                            f"✓ Page {page} is in expected range ({min_page}-{max_page})"
+                        )
+                    else:
+                        print(
+                            f"⚠ Page {page} is outside expected range ({min_page}-{max_page})"
+                        )
+
+                # Check content type
+                if content_type == "solution":
+                    print("✓ Correctly identified as solution page")
+                elif content_type == "summary":
+                    print("⚠ Found summary page instead of solution")
+
+            elif response.status_code == 404:
+                data = response.json()
+                error = data.get("error", "")
+
+                if "should_fail" in test_case and test_case["should_fail"]:
+                    print(f"✓ Expected failure: {error}")
+                else:
+                    print(f"✗ Unexpected 404: {error}")
+
+            else:
+                print(f"✗ HTTP {response.status_code}: {response.text}")
+
+        except requests.exceptions.ConnectionError:
+            print("✗ Connection failed - is the server running?")
+            print("  Start server with: python start.py")
+            break
+        except Exception as e:
+            print(f"✗ Error: {e}")
+
+    print("\n" + "=" * 60)
+    print("Test completed!")
+    print("\nTo start the server if not running:")
+    print("  python start.py")
+
+
 if __name__ == "__main__":
     # Test with both 2023 (new format) and 2011 (old format)
     print("=== Testing 2023 Question 3 ===")
@@ -208,3 +312,5 @@ if __name__ == "__main__":
     print("\n=== Testing 2011 Question 6 ===")
     result_2011 = test_improved_search("2011", 6)
     print("Result:", json.dumps(result_2011, indent=2))
+
+    test_improved_marking_scheme_logic()

@@ -152,6 +152,25 @@ def find_marking_scheme_page(year, question_number):
     if not os.path.exists(pdf_path):
         return jsonify({"error": "Marking scheme not found"}), 404
 
+    # Check if year is 2000 or before (no marking schemes available)
+    try:
+        year_int = int(year)
+        if year_int <= 2000:
+            return (
+                jsonify(
+                    {
+                        "error": f"Marking schemes are not available for year {year} (2000 and before)",
+                        "page": 1,
+                        "found": False,
+                        "year": year,
+                        "question_number": question_number,
+                    }
+                ),
+                404,
+            )
+    except ValueError:
+        pass
+
     try:
         # Import PyPDF2 for PDF processing
         import PyPDF2
@@ -159,35 +178,66 @@ def find_marking_scheme_page(year, question_number):
         with open(pdf_path, "rb") as file:
             reader = PyPDF2.PdfReader(file)
 
-            # Search through pages for the question
+            # IMPROVED LOGIC: Search for actual solution pages first
+            # Priority 1: Look for "QX Model Solution" pattern (most specific)
             for page_num, page in enumerate(reader.pages, 1):
                 text = page.extract_text()
                 text_lower = text.lower()
 
+                # High priority patterns - actual solution pages
+                model_solution_patterns = [
+                    f"q{question_number} model solution",
+                    f"q.{question_number} model solution",
+                    f"q {question_number} model solution",
+                    f"question {question_number} model solution",
+                ]
+
+                for pattern in model_solution_patterns:
+                    if pattern in text_lower:
+                        # Additional validation - make sure this has solution content
+                        has_solution_indicators = any(
+                            keyword in text_lower
+                            for keyword in [
+                                "marks",
+                                "scale",
+                                "credit",
+                                "method",
+                                "correct",
+                                "incorrect",
+                            ]
+                        )
+
+                        if has_solution_indicators:
+                            return jsonify(
+                                {
+                                    "page": page_num,
+                                    "found": True,
+                                    "year": year,
+                                    "question_number": question_number,
+                                    "matched_text": f"Found model solution pattern: {pattern}",
+                                    "content_type": "solution",
+                                }
+                            )
+
+            # Priority 2: Look for question headers in solution sections
+            # (Skip overview/summary pages by checking context)
+            for page_num, page in enumerate(reader.pages, 1):
+                text = page.extract_text()
+                text_lower = text.lower()
+                lines = text.split("\n")
+
                 # Enhanced patterns for both old and new marking scheme formats
                 patterns_to_check = [
-                    # Old format patterns
-                    f"question {question_number}",
-                    f"question{question_number}",
                     # New format patterns (like Q3, Q.3, etc.)
                     f"q{question_number}",
                     f"q.{question_number}",
                     f"q {question_number}",
-                    # Standalone number patterns
-                    f"{question_number}.",
-                    f"({question_number})",
-                    f"[{question_number}]",
-                    # Model solution patterns (newer format) - UPDATED FOR NEW FORMAT
-                    f"q{question_number} model solution",
-                    f"q{question_number} model solution –",
-                    f"q{question_number} model solution -",
-                    f"model solution – {question_number}",
-                    f"model solution - {question_number}",
-                    f"solution {question_number}",
+                    # Old format patterns
+                    f"question {question_number}",
+                    f"question{question_number}",
                 ]
 
                 # Check each line for question markers
-                lines = text.split("\n")
                 for line_idx, line in enumerate(lines):
                     line_clean = line.strip()
                     line_lower = line_clean.lower()
@@ -202,19 +252,15 @@ def find_marking_scheme_page(year, question_number):
                             # Additional validation based on context
                             is_valid_match = False
 
-                            # For newer format: Look for "Q3 Model Solution" pattern
-                            if f"q{question_number} model solution" in line_lower:
-                                is_valid_match = True
-
-                            # For newer format: Look for "Q3" at start of line or in table format
-                            elif f"q{question_number}" in line_lower:
+                            # For newer format: Look for "Q3" at start of line or in solution context
+                            if f"q{question_number}" in line_lower:
                                 if (
                                     line_lower.startswith(f"q{question_number}")
                                     or line_lower.startswith(f"q.{question_number}")
                                     or line_lower.startswith(f"q {question_number}")
                                 ):
                                     is_valid_match = True
-                                # Also check if it's in a table-like format (common in newer schemes)
+                                # Also check if it's in a solution context
                                 elif any(
                                     word in line_lower
                                     for word in ["marks", "model", "solution", "scale"]
@@ -229,45 +275,23 @@ def find_marking_scheme_page(year, question_number):
                                 ):
                                     is_valid_match = True
 
-                            # For standalone numbers: Be more careful
-                            elif f"{question_number}." in line_lower:
-                                # Make sure it's at the start of line or after whitespace
-                                if (
-                                    line_lower.startswith(f"{question_number}.")
-                                    or f" {question_number}." in line_lower
-                                    or f"\t{question_number}." in line_lower
-                                ):
-                                    # Additional check: make sure it's not just a page number or mark
-                                    if not any(
-                                        word in line_lower
-                                        for word in ["page", "total", "marks only"]
-                                    ):
-                                        is_valid_match = True
-
-                            # For model solution patterns
-                            elif (
-                                "model solution" in line_lower
-                                and str(question_number) in line_lower
-                            ):
-                                is_valid_match = True
-
                             if is_valid_match:
                                 # ENHANCED: Check if this is likely an instructions/summary page
                                 full_text_lower = text.lower()
 
                                 # Check if this looks like an instructions/summary page
-                                is_instructions_page = any(
+                                is_overview_page = any(
                                     keyword in full_text_lower
                                     for keyword in [
-                                        "instructions",
-                                        "answer questions as follows",
+                                        "summary of mark allocations",
                                         "section a",
                                         "section b",
                                         "answer all",
                                         "answer both",
                                         "answer any",
-                                        "there are three sections",
-                                        "write your answers in the spaces provided",
+                                        "structure of the marking scheme",
+                                        "scales and the marks that they generate",
+                                        "palette of annotations",
                                     ]
                                 )
 
@@ -278,17 +302,16 @@ def find_marking_scheme_page(year, question_number):
                                         "method",
                                         "scale",
                                         "partial credit",
-                                        "correct",
-                                        "incorrect",
                                         "low partial credit",
                                         "high partial credit",
                                         "marking notes",
+                                        "model solution",
                                     ]
                                 )
 
                                 # Count mathematical symbols and solution indicators
                                 math_symbols = sum(
-                                    1 for char in text if char in "=+-×÷∫∑√"
+                                    1 for char in text if char in "=+-×÷∫∑√()[]"
                                 )
                                 solution_words = sum(
                                     1
@@ -302,13 +325,12 @@ def find_marking_scheme_page(year, question_number):
                                     if word in full_text_lower
                                 )
 
-                                # Prioritize actual solution pages over instruction pages
-                                if (
-                                    is_instructions_page
-                                    and not has_solution_content
-                                    and math_symbols < 5
-                                ):
-                                    # This looks like an instructions page, continue searching
+                                # SKIP overview/summary pages - prioritize actual solution pages
+                                if is_overview_page and not has_solution_content:
+                                    continue
+
+                                # SKIP pages with very little mathematical content
+                                if math_symbols < 3 and solution_words < 2:
                                     continue
 
                                 return jsonify(

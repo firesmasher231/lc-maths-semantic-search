@@ -3,7 +3,7 @@ import os
 
 
 def find_question_3():
-    pdf_path = os.path.join("data", "markingscheme", "2023-markingscheme.pdf")
+    pdf_path = os.path.join("api", "data", "markingscheme", "2023-markingscheme.pdf")
 
     if not os.path.exists(pdf_path):
         print("2023 marking scheme not found")
