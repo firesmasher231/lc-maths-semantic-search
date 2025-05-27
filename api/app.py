@@ -2,6 +2,12 @@ from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import sys
+
+# Add the current directory to Python path for imports
+current_dir = os.path.dirname(os.path.abspath(__file__))
+if current_dir not in sys.path:
+    sys.path.insert(0, current_dir)
+
 from backend.nlp import MathPaperSearcher
 import threading
 import time
@@ -375,6 +381,27 @@ def get_available_papers():
     result.sort(key=lambda x: int(x["year"]), reverse=True)
 
     return jsonify(result)
+
+
+@app.route("/api/debug")
+def debug_info():
+    """Debug information for deployment troubleshooting."""
+    import sys
+
+    return jsonify(
+        {
+            "current_working_directory": os.getcwd(),
+            "python_path": sys.path,
+            "backend_module_location": getattr(
+                __import__("backend.nlp", fromlist=["MathPaperSearcher"]),
+                "__file__",
+                "Not found",
+            ),
+            "data_directory_exists": os.path.exists("data"),
+            "papers_directory_exists": os.path.exists("data/papers"),
+            "backend_directory_exists": os.path.exists("backend"),
+        }
+    )
 
 
 if __name__ == "__main__":
