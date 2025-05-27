@@ -56,6 +56,13 @@ def index():
     return render_template("index.html")
 
 
+@app.route("/debug/initialize")
+def debug_initialize():
+    """Debug information for deployment troubleshooting."""
+    initialize_searcher()
+    return jsonify({"message": "Searcher initialized successfully!"})
+
+
 @app.route("/api/status")
 def get_status():
     """Get the current processing status."""
