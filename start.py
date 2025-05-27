@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Railway startup script for LC Maths Semantic Search
-This script starts the application from the root directory.
+This script runs the existing run.py from the api directory.
 """
 
 import sys
@@ -14,9 +14,6 @@ sys.path.insert(0, api_dir)
 # Change working directory to api
 os.chdir(api_dir)
 
-# Import and run the application
-from api.app import app
-
+# Import and execute run.py
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    exec(open("run.py").read())
