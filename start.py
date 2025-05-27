@@ -15,7 +15,7 @@ sys.path.insert(0, api_dir)
 os.chdir(api_dir)
 
 # Import and run the application
-from app import app
+from api.app import app
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 5000))
