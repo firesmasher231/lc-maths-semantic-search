@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, jsonify, send_file
 from flask_cors import CORS
 import os
 import sys
+import gc
 
 # Add the current directory to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -44,6 +45,9 @@ def initialize_searcher():
         processing_status = "Ready"
         is_processing = False
         print("Searcher initialized successfully!")
+
+        # Force garbage collection after initialization
+        gc.collect()
     except Exception as e:
         processing_status = f"Error: {str(e)}"
         is_processing = False
@@ -100,6 +104,10 @@ def search():
 
     try:
         results = searcher.search(query, k=num_results)
+
+        # Force garbage collection after search to free memory
+        gc.collect()
+
         return jsonify(
             {"query": query, "results": results, "total_found": len(results)}
         )
@@ -429,6 +437,63 @@ def debug_info():
             "data_directory_exists": os.path.exists("data"),
             "papers_directory_exists": os.path.exists("data/papers"),
             "backend_directory_exists": os.path.exists("backend"),
+        }
+    )
+
+
+@app.route("/api/memory")
+def get_memory_info():
+    """Get memory usage information."""
+    import sys
+    import gc
+
+    # Force garbage collection
+    gc.collect()
+
+    # Get basic memory info
+    memory_info = {
+        "gc_stats": {
+            "collections": gc.get_stats(),
+            "count": gc.get_count(),
+            "garbage_objects": len(gc.garbage),
+        },
+        "model_loaded": (
+            searcher is not None and searcher._model is not None if searcher else False
+        ),
+        "embeddings_loaded": (
+            searcher is not None and searcher.embeddings is not None
+            if searcher
+            else False
+        ),
+        "questions_count": len(searcher.questions) if searcher else 0,
+        "processing_status": processing_status,
+    }
+
+    return jsonify(memory_info)
+
+
+@app.route("/api/cleanup", methods=["POST"])
+def force_cleanup():
+    """Force garbage collection and memory cleanup."""
+    import gc
+
+    # Force multiple rounds of garbage collection
+    collected = 0
+    for i in range(3):
+        collected += gc.collect()
+
+    # If searcher exists and model is loaded, unload it temporarily
+    model_unloaded = False
+    if searcher and searcher._model is not None:
+        searcher.unload_model()
+        model_unloaded = True
+        gc.collect()  # Clean up after model unload
+
+    return jsonify(
+        {
+            "message": "Memory cleanup completed",
+            "objects_collected": collected,
+            "model_unloaded": model_unloaded,
         }
     )
 

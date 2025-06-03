@@ -18,7 +18,9 @@ MAX_NUM_RESULTS = 20  # Maximum number of search results allowed
 MIN_QUESTION_LENGTH = 30  # Minimum question length to include in search
 
 # Model Configuration
-SENTENCE_TRANSFORMER_MODEL = "all-MiniLM-L6-v2"  # Sentence transformer model to use
+SENTENCE_TRANSFORMER_MODEL = (
+    "paraphrase-MiniLM-L3-v2"  # Much lighter model (~17MB vs ~80MB)
+)
 
 # UI Configuration
 APP_TITLE = "LC Maths Question Search"

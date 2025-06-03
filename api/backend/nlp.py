@@ -6,15 +6,107 @@ import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity
 from typing import List, Dict, Tuple
 import re
+import pickle
+import hashlib
 
 
 class MathPaperSearcher:
     def __init__(self, papers_dir: str = "data/papers"):
         self.papers_dir = papers_dir
-        self.model = SentenceTransformer("all-MiniLM-L6-v2")
+        # Load model only when needed and use smaller model
+        self._model = None
         self.embeddings = None
         self.questions = []
         self.metadata = []
+        self.cache_dir = "data/cache"
+        self.embeddings_cache_file = os.path.join(self.cache_dir, "embeddings.pkl")
+        self.questions_cache_file = os.path.join(self.cache_dir, "questions.pkl")
+
+        # Create cache directory if it doesn't exist
+        os.makedirs(self.cache_dir, exist_ok=True)
+
+    @property
+    def model(self):
+        """Lazy load the model only when needed."""
+        if self._model is None:
+            from config import SENTENCE_TRANSFORMER_MODEL
+
+            print(f"Loading model: {SENTENCE_TRANSFORMER_MODEL}")
+            self._model = SentenceTransformer(SENTENCE_TRANSFORMER_MODEL)
+        return self._model
+
+    def _get_cache_key(self) -> str:
+        """Generate a cache key based on the papers directory contents."""
+        files = []
+        for filename in sorted(os.listdir(self.papers_dir)):
+            if filename.endswith(".pdf"):
+                filepath = os.path.join(self.papers_dir, filename)
+                # Include filename and file size in hash
+                stat = os.stat(filepath)
+                files.append(f"{filename}:{stat.st_size}:{stat.st_mtime}")
+
+        cache_key = hashlib.md5("".join(files).encode()).hexdigest()
+        return cache_key
+
+    def _load_from_cache(self) -> bool:
+        """Load embeddings and questions from cache if available and valid."""
+        if not os.path.exists(self.embeddings_cache_file) or not os.path.exists(
+            self.questions_cache_file
+        ):
+            return False
+
+        try:
+            # Check if cache is still valid
+            with open(self.questions_cache_file, "rb") as f:
+                cached_data = pickle.load(f)
+
+            current_cache_key = self._get_cache_key()
+            if cached_data.get("cache_key") != current_cache_key:
+                print("Cache is outdated, will regenerate...")
+                return False
+
+            # Load cached data
+            self.questions = cached_data["questions"]
+            self.metadata = cached_data["metadata"]
+
+            with open(self.embeddings_cache_file, "rb") as f:
+                self.embeddings = pickle.load(f)
+
+            print(f"Loaded {len(self.questions)} questions from cache")
+            return True
+
+        except Exception as e:
+            print(f"Error loading cache: {e}")
+            return False
+
+    def _save_to_cache(self):
+        """Save embeddings and questions to cache."""
+        try:
+            # Save questions and metadata
+            cache_data = {
+                "questions": self.questions,
+                "metadata": self.metadata,
+                "cache_key": self._get_cache_key(),
+            }
+
+            with open(self.questions_cache_file, "wb") as f:
+                pickle.dump(cache_data, f)
+
+            # Save embeddings separately (they're large)
+            with open(self.embeddings_cache_file, "wb") as f:
+                pickle.dump(self.embeddings, f)
+
+            print("Saved embeddings and questions to cache")
+
+        except Exception as e:
+            print(f"Error saving cache: {e}")
+
+    def unload_model(self):
+        """Unload the model from memory to save RAM."""
+        if self._model is not None:
+            del self._model
+            self._model = None
+            print("Model unloaded from memory")
 
     def extract_text_with_pages(self, pdf_path: str) -> List[Tuple[str, int]]:
         """Extract text from a PDF file with page numbers."""
@@ -221,6 +313,10 @@ class MathPaperSearcher:
 
     def process_papers(self):
         """Process all papers and create search index."""
+        # Try to load from cache first
+        if self._load_from_cache():
+            return
+
         all_questions = []
         all_metadata = []
 
@@ -257,66 +353,86 @@ class MathPaperSearcher:
         self.questions = all_questions
         self.metadata = all_metadata
 
+        # Save to cache
+        self._save_to_cache()
+
+        # Unload model to save memory after processing
+        self.unload_model()
+
     def search(self, query: str, k: int = 5) -> List[Dict]:
         """Search for similar questions using natural language query with enhanced ranking."""
         if self.embeddings is None:
             raise ValueError("Please process papers first using process_papers()")
 
-        # Encode query for semantic similarity
-        query_embedding = self.model.encode([query])
+        # Load model only for the search operation
+        model_was_loaded = self._model is not None
 
-        # Calculate semantic similarities
-        semantic_similarities = cosine_similarity(query_embedding, self.embeddings)[0]
+        try:
+            # Encode query for semantic similarity
+            query_embedding = self.model.encode([query])
 
-        # Calculate keyword scores for all questions
-        keyword_scores = []
-        for question in self.questions:
-            keyword_score = self.calculate_keyword_score(query, question)
-            keyword_scores.append(keyword_score)
+            # Calculate semantic similarities
+            semantic_similarities = cosine_similarity(query_embedding, self.embeddings)[
+                0
+            ]
 
-        keyword_scores = np.array(keyword_scores)
+            # Calculate keyword scores for all questions
+            keyword_scores = []
+            for question in self.questions:
+                keyword_score = self.calculate_keyword_score(query, question)
+                keyword_scores.append(keyword_score)
 
-        # Combine semantic and keyword scores
-        # Give more weight to keyword matches for exact term queries
-        semantic_weight = 0.7
-        keyword_weight = 0.3
+            keyword_scores = np.array(keyword_scores)
 
-        # If query contains specific mathematical terms, increase keyword weight
-        math_terms = [
-            "theorem",
-            "formula",
-            "rule",
-            "law",
-            "principle",
-            "identity",
-            "equation",
-            "inequality",
-        ]
-        if any(term in query.lower() for term in math_terms):
-            semantic_weight = 0.6
-            keyword_weight = 0.4
+            # Combine semantic and keyword scores
+            # Give more weight to keyword matches for exact term queries
+            semantic_weight = 0.7
+            keyword_weight = 0.3
 
-        combined_scores = (semantic_weight * semantic_similarities) + (
-            keyword_weight * keyword_scores
-        )
+            # If query contains specific mathematical terms, increase keyword weight
+            math_terms = [
+                "theorem",
+                "formula",
+                "rule",
+                "law",
+                "principle",
+                "identity",
+                "equation",
+                "inequality",
+            ]
+            if any(term in query.lower() for term in math_terms):
+                semantic_weight = 0.6
+                keyword_weight = 0.4
 
-        # Get top k results
-        top_k_indices = np.argsort(combined_scores)[-k:][::-1]
-
-        # Prepare results
-        results = []
-        for idx in top_k_indices:
-            results.append(
-                {
-                    "question": self.questions[idx],
-                    "metadata": self.metadata[idx],
-                    "similarity_score": float(combined_scores[idx]),
-                    "semantic_score": float(semantic_similarities[idx]),
-                    "keyword_score": float(keyword_scores[idx]),
-                }
+            combined_scores = (semantic_weight * semantic_similarities) + (
+                keyword_weight * keyword_scores
             )
 
-        return results
+            # Get top k results
+            top_k_indices = np.argsort(combined_scores)[-k:][::-1]
+
+            # Prepare results
+            results = []
+            for idx in top_k_indices:
+                results.append(
+                    {
+                        "question": self.questions[idx],
+                        "metadata": self.metadata[idx],
+                        "similarity_score": float(combined_scores[idx]),
+                        "semantic_score": float(semantic_similarities[idx]),
+                        "keyword_score": float(keyword_scores[idx]),
+                    }
+                )
+
+            return results
+
+        finally:
+            # If model wasn't loaded before search, unload it after search to save memory
+            if not model_was_loaded and self._model is not None:
+                self.unload_model()
+                import gc
+
+                gc.collect()
 
 
 # Example usage
