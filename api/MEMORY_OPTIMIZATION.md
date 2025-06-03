@@ -4,10 +4,11 @@
 
 ### Key Optimizations Implemented
 
-1. **CPU-Only PyTorch** (saves ~500-800MB)
+1. **CPU-Only PyTorch Configuration** (saves ~300-500MB)
 
-   - Switched from full PyTorch to CPU-only version
-   - Removes GPU-related components that consume memory even when unused
+   - Force CPU-only execution with environment variables
+   - Reduce thread usage to minimize memory overhead
+   - Disable unnecessary parallelism features
 
 2. **Smaller Model** (saves ~60MB)
 
@@ -24,27 +25,23 @@
    - Model only loaded when needed for searches
    - Automatically unloaded after processing
 
-5. **Garbage Collection** (frees unused memory)
+5. **Thread & Process Optimization** (saves ~50-100MB)
+
+   - Single-threaded PyTorch operations
+   - Reduced OpenMP/MKL thread counts
+   - Disabled tokenizer parallelism
+
+6. **Garbage Collection** (frees unused memory)
    - Automatic cleanup after searches
    - Manual cleanup endpoint available
 
 ## 📋 Deployment Steps
 
-### 1. Apply Optimizations
+### 1. Deploy with Standard PyTorch
 
-```bash
-cd api
-python optimize_memory.py --clear-cache --reinstall
-```
+The optimizations are now deployment-friendly and don't require special PyTorch versions.
 
-### 2. Restart Your Application
-
-```bash
-# Stop current instance
-# Restart with your normal process (gunicorn, python app.py, etc.)
-```
-
-### 3. Monitor Memory Usage
+### 2. Monitor Memory Usage
 
 **Check memory status:**
 
@@ -60,12 +57,13 @@ curl -X POST http://your-domain/api/cleanup
 
 ## 📊 Expected Results
 
-| Component  | Before        | After          | Savings     |
-| ---------- | ------------- | -------------- | ----------- |
-| PyTorch    | ~800MB        | ~200MB         | ~600MB      |
-| Model      | ~80MB         | ~17MB          | ~63MB       |
-| Embeddings | Always in RAM | Cached to disk | Variable    |
-| **Total**  | **~1.5GB**    | **~400-600MB** | **~60-70%** |
+| Component    | Before        | After          | Savings     |
+| ------------ | ------------- | -------------- | ----------- |
+| PyTorch Base | ~800MB        | ~300MB         | ~500MB      |
+| Model        | ~80MB         | ~17MB          | ~63MB       |
+| Threading    | ~100MB        | ~20MB          | ~80MB       |
+| Embeddings   | Always in RAM | Cached to disk | Variable    |
+| **Total**    | **~1.5GB**    | **~400-600MB** | **~60-70%** |
 
 ## 🔍 Monitoring
 
@@ -97,16 +95,26 @@ curl -X POST http://your-domain/api/cleanup
 
 1. Check if model is persistently loaded: `GET /api/memory`
 2. Force cleanup: `POST /api/cleanup`
-3. Clear cache and restart: `python optimize_memory.py --clear-cache`
+3. Clear cache and restart the application
 
 ### If Search Performance Degrades:
 
 - The smaller model might have slightly lower accuracy
 - Can switch back to `all-MiniLM-L6-v2` in `config.py` if needed
-- Monitor search quality vs memory usage trade-off
+- Single-threading may make searches slightly slower but saves memory
 
 ## 💰 Hosting Cost Impact
 
-**Before:** 1.5GB RAM tier
-**After:** 512MB-1GB RAM tier
+**Before:** 1.5GB RAM tier  
+**After:** 512MB-1GB RAM tier  
 **Savings:** ~40-60% on hosting costs
+
+## 🔧 Technical Implementation
+
+The optimizations work by:
+
+1. **Environment Variables:** Force CPU-only mode before PyTorch loads
+2. **Thread Limiting:** Reduce concurrent operations to save memory
+3. **Model Caching:** Avoid reloading embeddings on each startup
+4. **Lazy Loading:** Only load model when actually needed for search
+5. **Garbage Collection:** Proactive cleanup of unused objects

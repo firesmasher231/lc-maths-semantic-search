@@ -1,6 +1,13 @@
 import os
 import PyPDF2
 import pandas as pd
+
+# Force PyTorch to use CPU only to reduce memory usage
+os.environ["CUDA_VISIBLE_DEVICES"] = ""
+import torch
+
+torch.set_num_threads(1)  # Reduce CPU thread usage for memory efficiency
+
 from sentence_transformers import SentenceTransformer
 import numpy as np
 from sklearn.metrics.pairwise import cosine_similarity

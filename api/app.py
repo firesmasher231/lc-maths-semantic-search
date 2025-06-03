@@ -4,6 +4,12 @@ import os
 import sys
 import gc
 
+# Memory optimization settings for PyTorch
+os.environ["CUDA_VISIBLE_DEVICES"] = ""  # Force CPU-only
+os.environ["OMP_NUM_THREADS"] = "1"  # Reduce OpenMP threads
+os.environ["MKL_NUM_THREADS"] = "1"  # Reduce MKL threads
+os.environ["TOKENIZERS_PARALLELISM"] = "false"  # Disable tokenizer parallelism
+
 # Add the current directory to Python path for imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
 if current_dir not in sys.path:
